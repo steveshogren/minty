@@ -74,6 +74,21 @@ Then you can launch the REPL:
 Everything you enter will be evaluated remotely in the running dyno,
 which can be very useful for debugging or inspecting live data.
 
+
+## Local repl connection
+Start the repl from lein 2
+
+	$ lein repl
+	nREPL server started on port 54563 on host 127.0.0.1
+	user=> (require 'minty.web)
+	nil
+	user=> (minty.web/-main 5000)
+
+Then start nrepl in emacs:
+
+	nrepl 127.0.0.1 54563
+
+
 ## License
 
 Copyright © 2014 FIXME
