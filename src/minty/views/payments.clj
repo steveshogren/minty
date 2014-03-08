@@ -1,4 +1,4 @@
-(ns minty.views.shouts
+(ns minty.views.payments
   (:require [minty.views.layout :as layout]
             [hiccup.core :refer [h]]
             [hiccup.form :as form]))
@@ -10,14 +10,15 @@
                  (form/text-area "shout")
                  (form/submit-button "SHOUT!"))])
 
-(defn display-shouts [shouts]
+(defn display-payments [payments]
   [:div {:class "shouts sixteen columns alpha omega"}
-   (map
-    (fn [shout] [:h2 {:class "shout"} (h (:body shout))])
-    shouts)])
+   [:ul
+    (map
+     (fn [payment] [:li {:class "shout"} (h (str (:amount payment) " -- " (:paid-to payment)))]
+       payments))]])
 
-(defn index [shouts]
-  (layout/common "SHOUTER"
-                 (shout-form)
+(defn index [payments]
+  (layout/common "Payments"
+                 (payments-form)
                  [:div {:class "clear"}]
-                 (display-shouts shouts)))
+                 (display-payments payments)))

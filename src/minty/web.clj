@@ -3,13 +3,13 @@
             [ring.adapter.jetty :as ring]
             [compojure.route :as route]
             [compojure.handler :as handler]
-            [minty.controllers.shouts :as shouts]
+            [minty.controllers.payments :as payments]
             [minty.views.layout :as layout]
             [minty.models.migration :as schema])
   (:gen-class))
 
 (defroutes routes
-  shouts/routes
+  payments/routes
   (route/resources "/")
   (route/not-found (layout/four-oh-four)))
 

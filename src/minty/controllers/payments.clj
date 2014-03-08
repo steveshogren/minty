@@ -1,9 +1,9 @@
-(ns minty.controllers.shouts
+(ns minty.controllers.payments
   (:require [compojure.core :refer [defroutes GET POST]]
             [clojure.string :as str]
             [ring.util.response :as ring]
-            [minty.views.shouts :as view]
-            [minty.models.shout :as model]))
+            [minty.views.payments :as view]
+            [minty.models.payment :as model]))
 
 (defn index []
   (view/index (model/all)))
@@ -16,4 +16,4 @@
 
 (defroutes routes
   (GET  "/" [] (index))
-  (POST "/" [shout] (create shout)))
+  #_(POST "/" [shout] (create shout)))
