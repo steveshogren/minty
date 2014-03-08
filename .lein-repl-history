@@ -10,3 +10,6 @@
 ["select * from testing"])
 (sql/db-do-commands "postgresql://localhost:5433/shouter"
  "drop table testing")
+(require 'minty.web)
+(minty.web/-main 5000)
+(minty.web/-main)

@@ -6,10 +6,10 @@
               "postgresql://localhost:5432/shouter"))
 
 (defn all []
-  [{:amount 59 :to "Jim Jam"}
-   {:amount 499 :to "Test"}
-   {:amount 499 :to "Horse"}]
+  [{:amount 59 :paid-to "Jim Jam"}
+   {:amount 499 :paid-to "Test"}
+   {:amount 499 :paid-to "Horse"}]
   #_(into [] (sql/query spec ["select * from payments order by id desc"])))
 
 (defn create [payment]
-  (sql/insert! spec :payments [:amount :to] [(:amount payment) (:to payment)]))
+  (sql/insert! spec :payments [:amount :paid-to] [(:amount payment) (:paid-to payment)]))
