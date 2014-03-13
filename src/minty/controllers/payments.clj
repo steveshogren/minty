@@ -8,12 +8,10 @@
 (defn index []
   (view/index (model/all)))
 
-(defn create
-  [shout]
-  (when-not (str/blank? shout)
-    (model/create shout))
+(defn create [payment]
+  (model/create payment)
   (ring/redirect "/"))
 
 (defroutes routes
   (GET  "/" [] (index))
-  #_(POST "/" [shout] (create shout)))
+  (POST "/" [amount paid_to] (create {:amount amount :paid_to paid_to})))

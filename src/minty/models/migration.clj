@@ -2,6 +2,7 @@
   (:require [clojure.java.jdbc :as sql]))
 
 (def db (or (System/getenv "DATABASE_URL")
+            "postgresql://localhost:5433/shouter"
             (System/getenv "HEROKU_POSTGRESQL_AMBER_URL")
             "postgresql://localhost:5432/shouter"))
 
