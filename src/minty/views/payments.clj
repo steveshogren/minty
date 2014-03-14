@@ -7,8 +7,8 @@
   [:div {:id "shout-form" :class "sixteen columns alpha omega"}
    [:span "Create new Payment"]
    (form/form-to [:post "/"]
-                 (form/label "paid_to" "Paid to:")
-                 (form/text-field "paid_to")
+                 (form/label "paid-to" "Paid to:")
+                 (form/text-field "paidto")
                  (form/label "amount" "Amount:")
                  (form/text-field "amount")
                  (form/submit-button "Create"))])

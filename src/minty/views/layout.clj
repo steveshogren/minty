@@ -9,10 +9,10 @@
     [:meta {:name "viewport" :content
             "width=device-width, initial-scale=1, maximum-scale=1"}]
     [:title title]
-    (h/include-css "/stylesheets/base.css"
+    #_(h/include-css "/stylesheets/base.css"
                  "/stylesheets/skeleton.css"
                  "/stylesheets/screen.css")
-    (h/include-css "http://fonts.googleapis.com/css?family=Sigmar+One&v1")]
+    #_(h/include-css "http://fonts.googleapis.com/css?family=Sigmar+One&v1")]
    [:body
     [:div {:id "header"}
      [:h1 {:class "container"} title]]

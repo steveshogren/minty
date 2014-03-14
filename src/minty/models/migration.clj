@@ -43,4 +43,4 @@
                                              "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]))
   (println " done"))
 
-(migrate)
+#_(migrate)

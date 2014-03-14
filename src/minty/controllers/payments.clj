@@ -14,4 +14,4 @@
 
 (defroutes routes
   (GET  "/" [] (index))
-  (POST "/" [amount paid_to] (create {:amount amount :paid_to paid_to})))
+  (POST "/" [paidto amount] (create {:amount amount :paid_to paidto})))
