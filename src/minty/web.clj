@@ -9,14 +9,14 @@
   (:gen-class))
 
 (defroutes routes
-  payments/routes
+  #'payments/routes
   (route/resources "/")
   (route/not-found (layout/four-oh-four)))
 
-(def application (handler/site routes))
+(def application (handler/site #'routes))
 
 (defn start [port]
-  (ring/run-jetty application {:port port
+  (ring/run-jetty #'application {:port port
                                :join? false}))
 
 (defn -main []

@@ -1,10 +1,7 @@
 (ns minty.models.migration
-  (:require [clojure.java.jdbc :as sql]))
-
-(def db (or (System/getenv "DATABASE_URL")
-            "postgresql://localhost:5433/shouter"
-            (System/getenv "HEROKU_POSTGRESQL_AMBER_URL")
-            "postgresql://localhost:5432/shouter"))
+  (:require [minty.models.db :as db]
+            [clojure.java.jdbc :as sql]
+            [minty.models.payment :as model]))
 
 (def table-list ["payments" "buckets"])
 
@@ -14,7 +11,7 @@
    (reduce #(str %1 ", " %2))))
 
 (defn tables-exist? []
-  (-> (sql/query db
+  (-> (sql/query db/db
                  [(str "select count(*) from information_schema.tables "
                        "where table_name in (" (commify table-list) ")")])
       first :count (= (count table-list))))
@@ -22,14 +19,17 @@
 (defn drop-all []
   (print "Dropping all tables") (flush)
   (if (tables-exist?)
-    (sql/db-do-commands db
+    (sql/db-do-commands db/db
                         (sql/drop-table-ddl :buckets)
                         (sql/drop-table-ddl :payments))))
+(defn create-some []
+  (model/createBucket "Test")
+  (model/create {:amount 100 :paid_to "Jack"}))
 
 (defn migrate []
   (drop-all)
   (print "Creating database structure...") (flush)
-  (sql/db-do-commands db
+  (sql/db-do-commands db/db
                       (sql/create-table-ddl :buckets
                                             [:id :serial "PRIMARY KEY"]
                                             [:name :varchar "NOT NULL"]
@@ -39,8 +39,10 @@
                                             [:id :serial "PRIMARY KEY"]
                                             [:paid_to :varchar "NOT NULL"]
                                             [:amount :decimal "NOT NULL"]
+                                            [:bucket_id :integer]
                                             [:created_at :timestamp
                                              "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]))
+  (create-some)
   (println " done"))
 
 #_(migrate)

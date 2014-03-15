@@ -88,7 +88,9 @@ Then start nrepl in emacs:
 
 	nrepl 127.0.0.1 54563
 
+To reload routes
 
+   (use 'minty.web :reload-all)
 ## License
 
 Copyright © 2014 FIXME
