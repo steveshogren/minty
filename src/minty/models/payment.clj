@@ -8,7 +8,6 @@
 
 
 (defn create [payment]
-  #_(throw (Exception. (str "Blah: " payment)))
   (sql/insert! db/db :payments [:amount :paid_to]
                [(Float/parseFloat (:amount payment)) (:paid_to payment)]))
 
@@ -16,7 +15,9 @@
   (sql/query db/db ["select * from buckets where id = ?" id]))
 
 (defn allBuckets []
-  (into [] (sql/query db/db ["select * from buckets order by id desc"])))
+  (into [] (sql/query db/db
+                      ["select b.id, b.name, sum(p.amount) as amount from buckets as b left join payments as p on b.id = p.bucket_id group by b.id"])))
+
 
 (defn createBucket [name]
   (sql/insert! db/db :buckets [:name] [name]))
@@ -29,6 +30,7 @@
 
 (comment
   (moveToBucket 1 1)
+  (moveToBucket 1 2)
   )
 
 

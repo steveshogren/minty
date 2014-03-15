@@ -5,8 +5,7 @@
             [minty.views.payments :as view]
             [minty.models.payment :as model]))
 
-(defn index []
-  (view/index (model/all) (model/allBuckets)))
+(defn index [] (view/index (model/all) (model/allBuckets)))
 
 (defn create [payment]
   (model/create payment)

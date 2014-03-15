@@ -22,8 +22,6 @@
                  (form/submit-button "Create"))])
 
 (defn display-payments [payments]
-  (future (println "TEST TEST"))
-  (.println System/out "OUT OUT")
   [:div 
    [:h2 "Payments"]
    [:ul
@@ -45,7 +43,10 @@
    [:ul
     (map
      (fn [bucket]
-       [:li (h (str (:name bucket) (:id bucket)))])
+       [:li (h (str "name: "(:name bucket)
+                    " -- id: " (:id bucket)
+                    " -- amount: " (:amount bucket)
+                    ))])
      buckets)]])
 
 (defn index [payments buckets]
