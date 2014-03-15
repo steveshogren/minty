@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html ng-app="project">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+</head>
+<script src="lib/angular.js"></script>
+<script src="home.js"></script>
+<body>
+  <div ng-controller="MintyCtrl">
+    <h3>Buckets</h3>
+    <ul ng-repeat="bucket in buckets">
+      <li ng-model="bucket">{{bucket.name}}</li>
+    </ul>
+    <input ng-model="newName"></input>
+    <a href="" ng-click="createBucket()">Create Bucket</a>
+    <h3>Payments</h3>
+  </div>
+  
+</body>
+</html>

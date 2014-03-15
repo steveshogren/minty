@@ -5,7 +5,8 @@
             [compojure.handler :as handler]
             [minty.controllers.payments :as payments]
             [minty.views.layout :as layout]
-            [minty.models.migration :as schema])
+            [minty.models.migration :as schema]
+            [ring.middleware.json :as middleware])
   (:gen-class))
 
 (defroutes routes
@@ -13,7 +14,11 @@
   (route/resources "/")
   (route/not-found (layout/four-oh-four)))
 
-(def application (handler/site #'routes))
+(def application 
+  (-> (handler/site #'routes)
+      (middleware/wrap-json-body)
+      (middleware/wrap-json-response)
+      (middleware/wrap-json-params)))
 
 (defn start [port]
   (ring/run-jetty #'application {:port port

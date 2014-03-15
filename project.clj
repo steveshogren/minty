@@ -11,7 +11,9 @@
                  [postgresql "9.1-901.jdbc4"]     
                  [ring-basic-authentication "1.0.1"]
                  [environ "0.2.1"]
-                 [com.cemerick/drawbridge "0.0.6"]]
+                 [com.cemerick/drawbridge "0.0.6"]
+                 [org.clojure/data.json "0.2.4"]
+                 [ring/ring-json "0.2.0"]]
   :min-lein-version "2.0.0"
   :plugins [[lein-ring "0.8.10"]
             [environ/environ.lein "0.2.1"]]

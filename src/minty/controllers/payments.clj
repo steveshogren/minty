@@ -3,7 +3,8 @@
             [clojure.string :as str]
             [ring.util.response :as ring]
             [minty.views.payments :as view]
-            [minty.models.payment :as model]))
+            [minty.models.payment :as model]
+            [clojure.data.json :as json]))
 
 (defn index [] (view/index (model/all) (model/allBuckets)))
 
@@ -21,6 +22,11 @@
 
 (defroutes routes
   (GET  "/" [] (index))
+  (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
+  (GET "/getAllPayments" [] (json/write-str (model/all)))
+  (POST "/bucket/create" [name]
+        #_(println (str "Data: " name))
+        (createBucket name))
   (POST "/" [paidto amount] (create {:amount amount :paid_to paidto}))
   (POST "/deleteBucket" [id] (deleteBucket id))
   (POST "/moveToBucket" [line-id bucket-id]
