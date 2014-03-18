@@ -23,7 +23,7 @@
   (sql/insert! db/db :buckets [:name] [name]))
 
 (defn deleteBucket [id]
-  (sql/delete! db/db :buckets [:id] [id]))
+  (sql/delete! db/db :buckets ["id = ?" id]))
 
 (defn moveToBucket [line-id bucket-id]
   (sql/update! db/db :payments {:bucket_id bucket-id} ["id = ?" line-id]))

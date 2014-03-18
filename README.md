@@ -76,6 +76,10 @@ which can be very useful for debugging or inspecting live data.
 
 
 ## Local repl connection
+Start db
+
+    chown jack /var/run/postgresql
+    postgres -D pg
 Start the repl from lein 2
 
     lein ring server

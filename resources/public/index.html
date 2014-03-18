@@ -10,11 +10,18 @@
   <div ng-controller="MintyCtrl">
     <h3>Buckets</h3>
     <ul ng-repeat="bucket in buckets">
-      <li ng-model="bucket">{{bucket.name}}</li>
+      <li>
+        <span>{{bucket.name}}</span>
+        <div>Amount: {{bucket.amount}}</div>
+        <a href="#" ng-click="deleteBucket(bucket.id)">Delete</a>
+      </li>
     </ul>
     <input ng-model="newName"></input>
     <a href="" ng-click="createBucket()">Create Bucket</a>
     <h3>Payments</h3>
+    To: <input ng-model="newPayment.to"></input>
+    Amount: <input ng-model="newPayment.amount"></input>
+    <a href="" ng-click="createPayment(newPayment.amount, newPayment.to)">Create Payment</a>
   </div>
   
 </body>
