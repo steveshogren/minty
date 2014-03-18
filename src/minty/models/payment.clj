@@ -7,9 +7,11 @@
                       ["select p.id, p.paid_to, p.amount, b.id as bucket_id, b.name from payments as p left join buckets as b on p.bucket_id = b.id"])))
 
 
-(defn create [payment]
+(defn createPayment [amount paid_to]
   (sql/insert! db/db :payments [:amount :paid_to]
-               [(Float/parseFloat (:amount payment)) (:paid_to payment)]))
+               [(Float/parseFloat amount) paid_to]))
+(defn deletePayment [id]
+  (sql/delete! db/db :payments ["id = ?" id]))
 
 (defn getBucket [id]
   (sql/query db/db ["select * from buckets where id = ?" id]))

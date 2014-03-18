@@ -8,14 +8,14 @@
 
 (defn index [] (view/index (model/all) (model/allBuckets)))
 
-(defn create [payment]
-  (model/create payment)
-  (ring/redirect "/"))
-
 (defroutes routes
   (GET  "/" [] (index))
   (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
   (GET "/getAllPayments" [] (json/write-str (model/all)))
+  (POST "/payment/delete" [id]
+        (model/deletePayment id))
+  (POST "/payment/create" [amount paid_to]
+        (model/createPayment amount paid_to))
   (POST "/bucket/create" [name] (model/createBucket name))
   (POST "/bucket/delete" [id]
         (println (str "Id was: " id))

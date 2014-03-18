@@ -12,6 +12,12 @@ angular.module('project', [])
             },
             createBucket: function (name) {
                 return $http({method:"POST", url:"/bucket/create", data: {"name":name}});
+            },
+            createPayment: function (amount, to) {
+                return $http({method:"POST", url:"/payment/create", data: {"amount":amount, "paid_to":to}});
+            },
+            deletePayment: function (id) {
+                return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
             }
         };
     }).controller ('MintyCtrl', function ($scope, mintyRepo) {
@@ -19,26 +25,37 @@ angular.module('project', [])
         $scope.payments = [];
         $scope.newName = "";
         $scope.newPayment = {to: "", amount: ""};
-        $scope.createPayment = function(to, amount){
-           mintyRepo.createPayment(to, amount).success(function(){
-               $scope.updateBuckets();
+
+        $scope.createPayment = function(amount, to){
+           mintyRepo.createPayment(amount, to).success(function(){
+               $scope.updateModels();
+               $scope.newPayment = {to: "", amount: ""};
+           }); 
+        };
+        $scope.deletePayment = function(id){
+           mintyRepo.deletePayment(id).success(function(){
+               $scope.updateModels();
            }); 
         };
         $scope.createBucket = function(){
            mintyRepo.createBucket($scope.newName).success(function(){
-               $scope.updateBuckets();
+               $scope.updateModels();
+               $scope.newName = "";
            }); 
         };
         $scope.deleteBucket = function(id){
            mintyRepo.deleteBucket(id).success(function(){
-               $scope.updateBuckets();
+               $scope.updateModels();
            }); 
         };
-        $scope.updateBuckets = function() {
+        $scope.updateModels = function() {
             mintyRepo.getAllBuckets ().success (function (buckets){
                 $scope.buckets = buckets;
             });
+            mintyRepo.getAllPayments ().success (function (payments){
+                $scope.payments = payments;
+            });
         };
-        $scope.updateBuckets();
+        $scope.updateModels();
     });
 
