@@ -10,19 +10,18 @@
    (map #(str "'" % "'"))
    (reduce #(str %1 ", " %2))))
 
-(defn tables-exist? []
+(defn table-exists? [t]
   (-> (sql/query db/db
                  [(str "select count(*) from information_schema.tables "
-                       "where table_name in (" (commify table-list) ")")])
-      first :count (= (count table-list))))
+                       "where table_name = '" t "'")])
+      first :count))
 
 (defn drop-all []
   (print "Dropping all tables") (flush)
-  (if (tables-exist?)
-    (sql/db-do-commands db/db
-                        (sql/drop-table-ddl :buckets)
-                        (sql/drop-table-ddl :payments)
-                        (sql/drop-table-ddl :rules))))
+  (map #(if (table-exists? %)
+          (sql/db-do-commands db/db (sql/drop-table-ddl (keyword %))))
+       table-list))
+
 (defn create-some []
   (model/createBucket "Test")
   (model/createPayment 100 "Jack"))
@@ -51,4 +50,6 @@
   (create-some)
   (println " done"))
 
-(migrate)
+(comment
+  (migrate)
+  )

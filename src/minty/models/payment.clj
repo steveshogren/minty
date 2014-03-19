@@ -9,6 +9,11 @@
 
 (defn createRule [regex]
   (sql/insert! db/db :rules [:regex] [regex]))
+(defn deleteRule [id]
+  (sql/delete! db/db :rules ["id = ?" id]))
+
+(defn getAllRules []
+  (into [] (sql/query db/db ["select id, regex from rules"])))
 
 (defn createPayment [amount paid_to]
   (sql/insert! db/db :payments [:amount :paid_to]

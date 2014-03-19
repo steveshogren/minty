@@ -12,16 +12,21 @@
   (GET  "/" [] (index))
   (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
   (GET "/getAllPayments" [] (json/write-str (model/all)))
-  (POST "/rule/create" [regex]
-        (model/createRule regex))
+  (GET "/rule/getAll" [] (json/write-str (model/getAllRules)))
+
+  (POST "/rule/create" [regex] (model/createRule regex))
+  (POST "/rule/delete" [id] (model/deleteRule id))
+
   (POST "/payment/delete" [id]
         (model/deletePayment id))
   (POST "/payment/create" [amount paid_to]
         (model/createPayment amount paid_to))
+
   (POST "/bucket/create" [name] (model/createBucket name))
   (POST "/bucket/delete" [id]
         (println (str "Id was: " id))
         (model/deleteBucket id))
+
   (POST "/" [paidto amount] (create {:amount amount :paid_to paidto}))
   (POST "/deleteBucket" [id] (deleteBucket id))
   (POST "/moveToBucket" [line-id bucket-id]

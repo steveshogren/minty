@@ -19,6 +19,12 @@ angular.module('project', [])
             deletePayment: function (id) {
                 return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
             },
+            getAllRules: function () {
+                return $http.get("/rule/getAll");
+            },
+            deleteRule: function (id) {
+                return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
+            },
             createRule: function (regex) {
                 return $http({method:"POST", url:"/rule/create", data: {"regex":regex}});
             }
@@ -28,6 +34,7 @@ angular.module('project', [])
         $scope.payments = [];
         $scope.newName = "";
         $scope.newRule = "";
+        $scope.rules = [];
         $scope.newPayment = {to: "", amount: ""};
 
         $scope.createRule = function(regex){
@@ -58,12 +65,20 @@ angular.module('project', [])
                $scope.updateModels();
            }); 
         };
+        $scope.deleteRule = function(id){
+           mintyRepo.deleteRule(id).success(function(){
+               $scope.updateModels();
+           }); 
+        };
         $scope.updateModels = function() {
             mintyRepo.getAllBuckets ().success (function (buckets){
                 $scope.buckets = buckets;
             });
             mintyRepo.getAllPayments ().success (function (payments){
                 $scope.payments = payments;
+            });
+            mintyRepo.getAllRules ().success (function (rules){
+                $scope.rules = rules;
             });
         };
         $scope.updateModels();
