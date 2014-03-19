@@ -7,6 +7,9 @@
                       ["select p.id, p.paid_to, p.amount, b.id as bucket_id, b.name from payments as p left join buckets as b on p.bucket_id = b.id"])))
 
 
+(defn createRule [regex]
+  (sql/insert! db/db :rules [:regex] [regex]))
+
 (defn createPayment [amount paid_to]
   (sql/insert! db/db :payments [:amount :paid_to]
                [(Float/parseFloat amount) paid_to]))

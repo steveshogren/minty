@@ -12,6 +12,8 @@
   (GET  "/" [] (index))
   (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
   (GET "/getAllPayments" [] (json/write-str (model/all)))
+  (POST "/rule/create" [regex]
+        (model/createRule regex))
   (POST "/payment/delete" [id]
         (model/deletePayment id))
   (POST "/payment/create" [amount paid_to]

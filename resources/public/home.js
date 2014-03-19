@@ -18,14 +18,24 @@ angular.module('project', [])
             },
             deletePayment: function (id) {
                 return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
+            },
+            createRule: function (regex) {
+                return $http({method:"POST", url:"/rule/create", data: {"regex":regex}});
             }
         };
     }).controller ('MintyCtrl', function ($scope, mintyRepo) {
         $scope.buckets = [];
         $scope.payments = [];
         $scope.newName = "";
+        $scope.newRule = "";
         $scope.newPayment = {to: "", amount: ""};
 
+        $scope.createRule = function(regex){
+           mintyRepo.createRule(regex).success(function(){
+               $scope.updateModels();
+               $scope.newRule = "";
+           }); 
+        };
         $scope.createPayment = function(amount, to){
            mintyRepo.createPayment(amount, to).success(function(){
                $scope.updateModels();
