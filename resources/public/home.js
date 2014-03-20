@@ -5,7 +5,7 @@ angular.module('project', [])
                 return $http.get("/getAllBuckets");
             },
             getAllPayments: function () {
-                return $http.get("/getAllPayments");
+                return $http.get("/payments");
             },
             deleteBucket: function (id) {
                 return $http({method:"POST", url:"/bucket/delete", data: {"id":id}});

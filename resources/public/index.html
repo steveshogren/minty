@@ -20,8 +20,10 @@
             <a href="#" ng-click="deleteRule(rule.id)">Delete</a>
           </li>
         </ul>
-        Regex: <input ng-model="newRule"></input>
-        <a href="" ng-click="createRule(newRule, bucket.id)">Create Rule</a>
+        <div>
+            Regex: <input ng-model="newRule"></input>
+            <a href="" ng-click="createRule(newRule, bucket.id)">Create Rule</a>
+        </div>
       </li>
     </ul>
     <input ng-model="newName"></input>
