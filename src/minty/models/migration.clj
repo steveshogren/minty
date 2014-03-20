@@ -33,6 +33,7 @@
                       (sql/create-table-ddl :rules
                                             [:id :serial "PRIMARY KEY"]
                                             [:regex :varchar "NOT NULL"]
+                                            [:bucket_id :integer "NOT NULL"]
                                             [:created_at :timestamp
                                              "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"])
                       (sql/create-table-ddl :buckets
@@ -47,7 +48,7 @@
                                             [:bucket_id :integer]
                                             [:created_at :timestamp
                                              "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]))
-  (create-some)
+  #_(create-some)
   (println " done"))
 
 (comment

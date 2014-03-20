@@ -14,6 +14,14 @@
         <span>{{bucket.name}}</span>
         <div>Amount: {{bucket.amount}}</div>
         <a href="#" ng-click="deleteBucket(bucket.id)">Delete</a>
+        <ul ng-repeat="rule in getRulesForBucket(bucket.id)">
+          <li>
+            <div>Regex: {{rule.regex}}</div>
+            <a href="#" ng-click="deleteRule(rule.id)">Delete</a>
+          </li>
+        </ul>
+        Regex: <input ng-model="newRule"></input>
+        <a href="" ng-click="createRule(newRule, bucket.id)">Create Rule</a>
       </li>
     </ul>
     <input ng-model="newName"></input>
@@ -29,15 +37,6 @@
     To: <input ng-model="newPayment.to"></input>
     Amount: <input ng-model="newPayment.amount"></input>
     <a href="" ng-click="createPayment(newPayment.amount, newPayment.to)">Create Payment</a>
-    <h3>Rules</h3>
-    <ul ng-repeat="rule in rules">
-      <li>
-        <div>Regex: {{rule.regex}}</div>
-        <a href="#" ng-click="deleteRule(rule.id)">Delete</a>
-      </li>
-    </ul>
-    Regex: <input ng-model="newRule"></input>
-    <a href="" ng-click="createRule(newRule)">Create Rule</a>
   </div>
   
 </body>

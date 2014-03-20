@@ -25,8 +25,8 @@ angular.module('project', [])
             deleteRule: function (id) {
                 return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
             },
-            createRule: function (regex) {
-                return $http({method:"POST", url:"/rule/create", data: {"regex":regex}});
+            createRule: function (regex, bid) {
+                return $http({method:"POST", url:"/rule/create", data: {"regex":regex, "bucket_id":bid}});
             }
         };
     }).controller ('MintyCtrl', function ($scope, mintyRepo) {
@@ -36,9 +36,12 @@ angular.module('project', [])
         $scope.newRule = "";
         $scope.rules = [];
         $scope.newPayment = {to: "", amount: ""};
+        $scope.getRulesForBucket = function(bid) {
+            return $scope.rules.filter(function(r){return r.bucket_id === bid;});
+        };
 
-        $scope.createRule = function(regex){
-           mintyRepo.createRule(regex).success(function(){
+        $scope.createRule = function(regex, bid){
+           mintyRepo.createRule(regex, bid).success(function(){
                $scope.updateModels();
                $scope.newRule = "";
            }); 

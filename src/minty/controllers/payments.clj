@@ -14,7 +14,10 @@
   (GET "/getAllPayments" [] (json/write-str (model/all)))
   (GET "/rule/getAll" [] (json/write-str (model/getAllRules)))
 
-  (POST "/rule/create" [regex] (model/createRule regex))
+  (POST "/rule/create" [regex bucket_id]
+        (println (str "Rule create regex: " regex " bucket: " bucket_id))
+        (model/createRule regex bucket_id))
+
   (POST "/rule/delete" [id] (model/deleteRule id))
 
   (POST "/payment/delete" [id]
