@@ -36,6 +36,9 @@ angular.module('project', [])
         $scope.newRule = "";
         $scope.rules = [];
         $scope.newPayment = {to: "", amount: ""};
+        $scope.unbucketedPayments = function() {
+            return $scope.payments.filter(function(p){return p.bucket_id == null;});
+        };
         $scope.getRulesForBucket = function(bid) {
             return $scope.rules.filter(function(r){return r.bucket_id === bid;});
         };

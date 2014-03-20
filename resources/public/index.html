@@ -16,20 +16,20 @@
         <a href="#" ng-click="deleteBucket(bucket.id)">Delete</a>
         <ul ng-repeat="rule in getRulesForBucket(bucket.id)">
           <li>
-            <div>Regex: {{rule.regex}}</div>
-            <a href="#" ng-click="deleteRule(rule.id)">Delete</a>
+            <div>Pattern: {{rule.regex}} <a href="#" ng-click="deleteRule(rule.id)">Delete</a> </div>
+            
           </li>
         </ul>
         <div>
-            Regex: <input ng-model="newRule"></input>
-            <a href="" ng-click="createRule(newRule, bucket.id)">Create Rule</a>
+            Pattern: <input ng-model="newRule"></input>
+            <a href="" ng-click="createRule(newRule, bucket.id)">Create Pattern</a>
         </div>
       </li>
     </ul>
     <input ng-model="newName"></input>
     <a href="" ng-click="createBucket()">Create Bucket</a>
     <h3>Payments</h3>
-    <ul ng-repeat="payment in payments">
+    <ul ng-repeat="payment in unbucketedPayments()">
       <li>
         <span>Paid To: {{payment.paid_to}}, in Bucket: {{payment.name}}</span>
         <div>Amount: {{payment.amount}}</div>
