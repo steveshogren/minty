@@ -6,12 +6,12 @@
             [minty.models.payment :as model]
             [clojure.data.json :as json]))
 
-(defn index [] (view/index (model/all) (model/allBuckets)))
+(defn index [] (view/index (model/getAllPayments) (model/allBuckets)))
 
 (defroutes routes
   (GET  "/" [] (index))
   (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
-  (GET "/getAllPayments" [] (json/write-str (model/all)))
+  (GET "/getAllPayments" [] (json/write-str (model/getAllPayments)))
 
   (GET "/payments" [] (json/write-str (model/grouped-payments)))
 
@@ -32,9 +32,4 @@
   (POST "/bucket/delete" [id]
         (println (str "Id was: " id))
         (model/deleteBucket id))
-
-  (POST "/" [paidto amount] (create {:amount amount :paid_to paidto}))
-  (POST "/deleteBucket" [id] (deleteBucket id))
-  (POST "/moveToBucket" [line-id bucket-id]
-        (model/moveToBucket line-id bucket-id))
-  (POST "/createBucket" [name] (createBucket name)))
+  )

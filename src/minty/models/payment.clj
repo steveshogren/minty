@@ -6,6 +6,9 @@
   (into [] (sql/query db/db
                       ["select p.id, p.paid_to, p.amount, b.id as bucket_id, b.name from payments as p left join buckets as b on p.bucket_id = b.id"])))
 
+(defn getAllRules []
+  (into [] (sql/query db/db ["select r.id, r.regex, r.bucket_id, b.name from rules as r left join buckets as b on r.bucket_id = b.id"])))
+
 (defn match-rule-to-payment [rules payment]
   (let [rule-match
         (first (filter (fn [rule]
@@ -30,8 +33,6 @@
 (defn deleteRule [id]
   (sql/delete! db/db :rules ["id = ?" id]))
 
-(defn getAllRules []
-  (into [] (sql/query db/db ["select r.id, r.regex, r.bucket_id, b.name from rules as r left join buckets as b on r.bucket_id = b.id"])))
 
 (defn createPayment [amount paid_to]
   (sql/insert! db/db :payments [:amount :paid_to]
