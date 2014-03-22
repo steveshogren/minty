@@ -46,6 +46,7 @@
                                             [:paid_to :varchar "NOT NULL"]
                                             [:amount :decimal "NOT NULL"]
                                             [:bucket_id :integer]
+                                            [:on_date :date "NOT NULL"]
                                             [:created_at :timestamp
                                              "NOT NULL" "DEFAULT CURRENT_TIMESTAMP"]))
   #_(create-some)

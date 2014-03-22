@@ -11,7 +11,6 @@
 (defroutes routes
   (GET  "/" [] (ring/resource-response "index.html" {:root "public"}))
   (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
-  (GET "/getAllPayments" [] (json/write-str (model/getAllPayments)))
 
   (GET "/payments" [] (json/write-str (model/grouped-payments)))
 
@@ -25,8 +24,8 @@
 
   (POST "/payment/delete" [id]
         (model/deletePayment id))
-  (POST "/payment/create" [amount paid_to]
-        (model/createPayment amount paid_to))
+  (POST "/payment/create" [amount paid_to date]
+        (model/createPayment amount paid_to date))
 
   (POST "/bucket/create" [name] (model/createBucket name))
   (POST "/bucket/delete" [id]

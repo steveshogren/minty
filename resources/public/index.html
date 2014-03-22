@@ -29,16 +29,20 @@
     <input ng-model="newName"></input>
     <a href="" ng-click="createBucket()">Create Bucket</a>
     <h3>Payments</h3>
-    <ul ng-repeat="payment in unbucketedPayments()">
+    To: <input ng-model="newPayment.to"></input>
+    Amount: <input ng-model="newPayment.amount"></input>
+    <a href="" ng-click="createPayment(newPayment.amount, newPayment.to)">Create Payment</a>
+    <div>
+    <a href="" ng-show="!showAllPayments" ng-click="togglePayments()">Show all payments</a>
+    <a href="" ng-show="showAllPayments" ng-click="togglePayments()">Show unbucketed payments</a>
+    </div>
+    <ul ng-repeat="payment in getPayments()">
       <li>
         <span>Paid To: {{payment.paid_to}}, in Bucket: {{payment.name}}</span>
         <div>Amount: {{payment.amount}}</div>
         <a href="#" ng-click="deletePayment(payment.id)">Delete</a>
       </li>
     </ul>
-    To: <input ng-model="newPayment.to"></input>
-    Amount: <input ng-model="newPayment.amount"></input>
-    <a href="" ng-click="createPayment(newPayment.amount, newPayment.to)">Create Payment</a>
   </div>
   
 </body>

@@ -13,8 +13,8 @@ angular.module('project', [])
             createBucket: function (name) {
                 return $http({method:"POST", url:"/bucket/create", data: {"name":name}});
             },
-            createPayment: function (amount, to) {
-                return $http({method:"POST", url:"/payment/create", data: {"amount":amount, "paid_to":to}});
+            createPayment: function (amount, to, date) {
+                return $http({method:"POST", url:"/payment/create", data: {"amount":amount, "paid_to":to, "date": date}});
             },
             deletePayment: function (id) {
                 return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
@@ -35,22 +35,28 @@ angular.module('project', [])
         $scope.newName = "";
         $scope.newRule = "";
         $scope.rules = [];
+        $scope.showAllPayments = false;
         $scope.newPayment = {to: "", amount: ""};
-        $scope.unbucketedPayments = function() {
+        $scope.getPayments = function() {
+            if ($scope.showAllPayments) {
+                return $scope.payments;
+            } 
             return $scope.payments.filter(function(p){return p.bucket_id == null;});
         };
         $scope.getRulesForBucket = function(bid) {
             return $scope.rules.filter(function(r){return r.bucket_id === bid;});
         };
-
+        $scope.togglePayments = function() {
+            return $scope.showAllPayments = !$scope.showAllPayments;
+        };
         $scope.createRule = function(regex, bid){
            mintyRepo.createRule(regex, bid).success(function(){
                $scope.updateModels();
                $scope.newRule = "";
            }); 
         };
-        $scope.createPayment = function(amount, to){
-           mintyRepo.createPayment(amount, to).success(function(){
+        $scope.createPayment = function(amount, to, date){
+           mintyRepo.createPayment(amount, to, date).success(function(){
                $scope.updateModels();
                $scope.newPayment = {to: "", amount: ""};
            }); 
