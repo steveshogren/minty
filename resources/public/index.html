@@ -38,7 +38,7 @@
     </div>
     <ul ng-repeat="payment in getPayments()">
       <li>
-        <span>Paid To: {{payment.paid_to}}, in Bucket: {{payment.name}}</span>
+        <span>Paid To: {{payment.paid_to}} on {{payment.on_date}}</span>
         <div>Amount: {{payment.amount}}</div>
         <a href="#" ng-click="deletePayment(payment.id)">Delete</a>
       </li>

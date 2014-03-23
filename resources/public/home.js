@@ -66,6 +66,7 @@ angular.module('project', [])
                $scope.updateModels();
            }); 
         };
+
         $scope.createBucket = function(){
            mintyRepo.createBucket($scope.newName).success(function(){
                $scope.updateModels();
