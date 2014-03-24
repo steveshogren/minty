@@ -62,9 +62,9 @@ angular.module('project', [])
            }); 
         };
         $scope.deletePayment = function(id){
-           mintyRepo.deletePayment(id).success(function(){
-               $scope.updateModels();
-           }); 
+          // mintyRepo.deletePayment(id).success(function(){
+          //     $scope.updateModels();
+          // }); 
         };
 
         $scope.createBucket = function(){
@@ -74,9 +74,16 @@ angular.module('project', [])
            }); 
         };
         $scope.deleteBucket = function(id){
-           mintyRepo.deleteBucket(id).success(function(){
-               $scope.updateModels();
-           }); 
+            var ask = confirm("There are rules on this bucket, are you sure you want to delete them and this?");
+            if (ask) {
+                var rules = $scope.getRulesForBucket(id);
+                for (var i=0;i<rules.length;i++) {
+                    $scope.deleteRule(rules[i].rule_id);
+                }
+                mintyRepo.deleteBucket(id).success(function(){
+                    $scope.updateModels();
+                }); 
+            } 
         };
         $scope.deleteRule = function(id){
            mintyRepo.deleteRule(id).success(function(){
@@ -84,13 +91,13 @@ angular.module('project', [])
            }); 
         };
         $scope.updateModels = function() {
-            mintyRepo.getAllBuckets ().success (function (buckets){
+            mintyRepo.getAllBuckets().success (function (buckets){
                 $scope.buckets = buckets;
             });
-            mintyRepo.getAllPayments ().success (function (payments){
+            mintyRepo.getAllPayments().success (function (payments){
                 $scope.payments = payments;
             });
-            mintyRepo.getAllRules ().success (function (rules){
+            mintyRepo.getAllRules().success (function (rules){
                 $scope.rules = rules;
             });
         };
