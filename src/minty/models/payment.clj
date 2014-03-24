@@ -7,10 +7,12 @@
 
 
 (defn getAllPayments []
-  (into [] (sql/query db/db
-                      ["select p.id as payment_id, p.paid_to, p.amount, b.id as bucket_id, b.name
-                        from payments as p
-                        left join buckets as b on p.bucket_id = b.id"])))
+  (let [payments (into [] (sql/query db/db
+                                     ["select p.id as payment_id, p.paid_to, p.amount, b.id as bucket_id, b.name, p.on_date
+                                      from payments as p
+                                      left join buckets as b on p.bucket_id = b.id
+                                      order by on_date desc"]))]
+    (map (fn [p] (assoc p :on_date (str (:on_date p)))) payments)))
 
 (defn getAllRules []
   (into [] (sql/query db/db
