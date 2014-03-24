@@ -13,16 +13,16 @@
       <li>
         <span>{{bucket.name}}</span>
         <div>Amount: {{bucket.amount}}</div>
-        <a href="#" ng-click="deleteBucket(bucket.id)">Delete</a>
-        <ul ng-repeat="rule in getRulesForBucket(bucket.id)">
+        <a href="#" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
+        <ul ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
           <li>
-            <div>Pattern: {{rule.regex}} <a href="#" ng-click="deleteRule(rule.id)">Delete</a> </div>
+            <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a href="#" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
             
           </li>
         </ul>
         <div>
             Pattern: <input ng-model="newRule"></input>
-            <a href="" ng-click="createRule(newRule, bucket.id)">Create Pattern</a>
+            <a href="" ng-click="createRule(newRule, bucket.bucket_id)">Create Pattern</a>
         </div>
       </li>
     </ul>
@@ -40,7 +40,7 @@
       <li>
         <span>Paid To: {{payment.paid_to}} on {{payment.on_date}}</span>
         <div>Amount: {{payment.amount}}</div>
-        <a href="#" ng-click="deletePayment(payment.id)">Delete</a>
+        <a href="#" ng-click="deletePayment(payment.payment_id)">Delete</a>
       </li>
     </ul>
   </div>

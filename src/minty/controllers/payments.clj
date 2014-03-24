@@ -14,7 +14,9 @@
 
   (GET "/payments" [] (json/write-str (model/grouped-payments)))
 
-  (GET "/rule/getAll" [] (json/write-str (model/getAllRules)))
+  (GET "/rule/getAll" []
+       #_(println (str (model/getSummedRules)))
+       (json/write-str (model/getSummedRules)))
 
   (POST "/rule/create" [regex bucket_id]
         (println (str "Rule create regex: " regex " bucket: " bucket_id))

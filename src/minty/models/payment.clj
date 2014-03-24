@@ -8,19 +8,19 @@
 
 (defn getAllPayments []
   (into [] (sql/query db/db
-                      ["select p.id, p.paid_to, p.amount, b.id as bucket_id, b.name
+                      ["select p.id as payment_id, p.paid_to, p.amount, b.id as bucket_id, b.name
                         from payments as p
                         left join buckets as b on p.bucket_id = b.id"])))
 
 (defn getAllRules []
   (into [] (sql/query db/db
-                      ["select r.id, r.regex, r.bucket_id, b.name
+                      ["select r.id as rule_id, r.regex, r.bucket_id, b.name
                         from rules as r
                         left join buckets as b on r.bucket_id = b.id"])))
 
 (defn match-bucket-to-payment [buckets payment-groups]
   (map (fn [b]
-         (if-let [amount (-> (filter (fn [[bid _]] (= bid (:id b)))
+         (if-let [amount (-> (filter (fn [[bid _]] (= bid (:bucket_id b)))
                                      payment-groups)
                              first
                              second)]
@@ -29,11 +29,14 @@
            b))
        buckets))
 
+(defn sum-payments-in-group [payment-group]
+  (map (fn [[k v]] [k (reduce #(+ %1 (:amount %2)) 0 v)]) payment-group))
+
 (defn allBuckets []
   (let [payments (group-by :bucket_id (grouped-payments))
-        payment-counts (map (fn [[k v]] [k (reduce #(+ %1 (:amount %2)) 0 v)]) payments)
+        payment-counts (sum-payments-in-group payments)
         buckets (into [] (sql/query db/db
-                                    ["select b.id, b.name, sum(p.amount) as amount
+                                    ["select b.id as bucket_id, b.name, sum(p.amount) as amount
                                       from buckets as b
                                       left join payments as p on b.id = p.bucket_id group by b.id"]))]
     (match-bucket-to-payment buckets payment-counts)))
@@ -55,6 +58,12 @@
              p
              (match-rule-to-payment rules p)))
          payments)))
+
+(defn getSummedRules []
+  (let [rules (getAllRules)
+        payments (group-by :rule_id (grouped-payments))
+        summed_payments (sum-payments-in-group payments)]
+    (map (fn [rule] (assoc rule :amount (second (first (filter (fn [[rule_id _]] (= (:rule_id rule) rule_id)) summed_payments))))) rules)))
 
 (defn createRule [regex bucket_id]
   (sql/insert! db/db :rules [:regex :bucket_id] [regex bucket_id]))
