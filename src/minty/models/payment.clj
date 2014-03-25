@@ -7,13 +7,14 @@
 
 
 (defn getAllPayments [range]
-  (let [payments (into [] (sql/query db/db
-                                     ["select p.id as payment_id, p.paid_to, p.amount, b.id as bucket_id, b.name, p.on_date
+  (let [range (Integer/parseInt range)
+        payments (into [] (sql/query db/db
+                                     [(str "select p.id as payment_id, p.paid_to, p.amount, b.id as bucket_id, b.name, p.on_date
                                       from payments as p
                                       left join buckets as b on p.bucket_id = b.id
                                       where p.on_date <= CURRENT_DATE
-                                            and p.on_date > (CURRENT_DATE - INTERVAL '30 days')::date
-                                      order by on_date desc"]))]
+                                            and p.on_date > (CURRENT_DATE - INTERVAL '" range " days')::date
+                                      order by on_date desc")]))]
     (map (fn [p] (assoc p :on_date (str (:on_date p)))) payments)))
 
 (defn getAllRules []

@@ -2,10 +2,10 @@ angular.module('project', [])
     .factory ('mintyRepo', function ($http){
         return {
             getAllBuckets: function (range) {
-                return $http({method:"GET", url:"/buckets", data: {"range":range}});
+                return $http({method:"GET", url:"/buckets", params: {"range":range}});
             },
             getAllPayments: function (range) {
-                return $http({method:"GET", url:"/payments", data: {"range":range}});
+                return $http({method:"GET", url:"/payments", params: {"range":range}});
             },
             deleteBucket: function (id) {
                 return $http({method:"POST", url:"/bucket/delete", data: {"id":id}});
@@ -20,7 +20,7 @@ angular.module('project', [])
                 return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
             },
             getAllRules: function (range) {
-                return $http({method:"GET", url:"/rules", data: {"range":range}});
+                return $http({method:"GET", url:"/rules", params: {"range":range}});
             },
             deleteRule: function (id) {
                 return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
@@ -98,6 +98,7 @@ angular.module('project', [])
         $scope.updateModels = function() {
             mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
                 $scope.buckets = buckets;
+                //$scope.apply();
             });
             mintyRepo.getAllPayments($scope.dayRange).success (function (payments){
                 $scope.payments = payments;
