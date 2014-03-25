@@ -1,11 +1,11 @@
 angular.module('project', [])
     .factory ('mintyRepo', function ($http){
         return {
-            getAllBuckets: function () {
-                return $http.get("/getAllBuckets");
+            getAllBuckets: function (range) {
+                return $http({method:"GET", url:"/buckets", data: {"range":range}});
             },
-            getAllPayments: function () {
-                return $http.get("/payments");
+            getAllPayments: function (range) {
+                return $http({method:"GET", url:"/payments", data: {"range":range}});
             },
             deleteBucket: function (id) {
                 return $http({method:"POST", url:"/bucket/delete", data: {"id":id}});
@@ -19,8 +19,8 @@ angular.module('project', [])
             deletePayment: function (id) {
                 return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
             },
-            getAllRules: function () {
-                return $http.get("/rule/getAll");
+            getAllRules: function (range) {
+                return $http({method:"GET", url:"/rules", data: {"range":range}});
             },
             deleteRule: function (id) {
                 return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
@@ -37,6 +37,11 @@ angular.module('project', [])
         $scope.rules = [];
         $scope.showAllPayments = false;
         $scope.newPayment = {to: "", amount: ""};
+
+        $scope.dayRange = 30;
+
+        $scope.days = [7, 30, 90, 365];
+        
         $scope.getPayments = function() {
             if ($scope.showAllPayments) {
                 return $scope.payments;
@@ -91,13 +96,13 @@ angular.module('project', [])
            }); 
         };
         $scope.updateModels = function() {
-            mintyRepo.getAllBuckets().success (function (buckets){
+            mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
                 $scope.buckets = buckets;
             });
-            mintyRepo.getAllPayments().success (function (payments){
+            mintyRepo.getAllPayments($scope.dayRange).success (function (payments){
                 $scope.payments = payments;
             });
-            mintyRepo.getAllRules().success (function (rules){
+            mintyRepo.getAllRules($scope.dayRange).success (function (rules){
                 $scope.rules = rules;
             });
         };

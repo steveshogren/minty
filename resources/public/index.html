@@ -8,6 +8,7 @@
 <script src="home.js"></script>
 <body>
   <div ng-controller="MintyCtrl">
+    <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
     <h3>Buckets</h3>
     <ul ng-repeat="bucket in buckets">
       <li>
@@ -29,9 +30,11 @@
     <input ng-model="newName"></input>
     <a href="" ng-click="createBucket()">Create Bucket</a>
     <h3>Payments</h3>
+    <!--
     To: <input ng-model="newPayment.to"></input>
     Amount: <input ng-model="newPayment.amount"></input>
     <a href="" ng-click="createPayment(newPayment.amount, newPayment.to)">Create Payment</a>
+    -->
     <div>
     <a href="" ng-show="!showAllPayments" ng-click="togglePayments()">Show all payments</a>
     <a href="" ng-show="showAllPayments" ng-click="togglePayments()">Show unbucketed payments</a>
@@ -40,7 +43,7 @@
       <li>
         <span>Paid To: {{payment.paid_to}} on {{payment.on_date}}</span>
         <div>Amount: {{payment.amount}}</div>
-        <a href="#" ng-click="deletePayment(payment.payment_id)">Delete</a>
+        <!-- <a href="#" ng-click="deletePayment(payment.payment_id)">Delete</a> -->
       </li>
     </ul>
   </div>

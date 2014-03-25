@@ -10,13 +10,13 @@
 
 (defroutes routes
   (GET  "/" [] (ring/resource-response "index.html" {:root "public"}))
-  (GET "/getAllBuckets" [] (json/write-str (model/allBuckets)))
+  (GET "/buckets" [range] (json/write-str (model/allBuckets range)))
 
-  (GET "/payments" [] (json/write-str (model/grouped-payments)))
+  (GET "/payments" [range] (json/write-str (model/grouped-payments range)))
 
-  (GET "/rule/getAll" []
+  (GET "/rules" [range]
        #_(println (str (model/getSummedRules)))
-       (json/write-str (model/getSummedRules)))
+       (json/write-str (model/getSummedRules range)))
 
   (POST "/rule/create" [regex bucket_id]
         (println (str "Rule create regex: " regex " bucket: " bucket_id))

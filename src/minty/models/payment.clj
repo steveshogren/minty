@@ -6,11 +6,13 @@
             [minty.models.db :as db]))
 
 
-(defn getAllPayments []
+(defn getAllPayments [range]
   (let [payments (into [] (sql/query db/db
                                      ["select p.id as payment_id, p.paid_to, p.amount, b.id as bucket_id, b.name, p.on_date
                                       from payments as p
                                       left join buckets as b on p.bucket_id = b.id
+                                      where p.on_date <= CURRENT_DATE
+                                            and p.on_date > (CURRENT_DATE - INTERVAL '30 days')::date
                                       order by on_date desc"]))]
     (map (fn [p] (assoc p :on_date (str (:on_date p)))) payments)))
 
@@ -34,8 +36,8 @@
 (defn sum-payments-in-group [payment-group]
   (map (fn [[k v]] [k (reduce #(+ %1 (:amount %2)) 0 v)]) payment-group))
 
-(defn allBuckets []
-  (let [payments (group-by :bucket_id (grouped-payments))
+(defn allBuckets [range]
+  (let [payments (group-by :bucket_id (grouped-payments range))
         payment-counts (sum-payments-in-group payments)
         buckets (into [] (sql/query db/db
                                     ["select b.id as bucket_id, b.name, sum(p.amount) as amount
@@ -52,8 +54,8 @@
       (merge payment rule-match)
       payment)))
 
-(defn grouped-payments []
-  (let [payments (getAllPayments)
+(defn grouped-payments [range]
+  (let [payments (getAllPayments range)
         rules (getAllRules)]
     (map (fn [p] 
            (if (:bucket_id p)
@@ -61,9 +63,9 @@
              (match-rule-to-payment rules p)))
          payments)))
 
-(defn getSummedRules []
+(defn getSummedRules [range]
   (let [rules (getAllRules)
-        payments (group-by :rule_id (grouped-payments))
+        payments (group-by :rule_id (grouped-payments range))
         summed_payments (sum-payments-in-group payments)]
     (map (fn [rule] (assoc rule :amount (second (first (filter (fn [[rule_id _]] (= (:rule_id rule) rule_id)) summed_payments))))) rules)))
 
