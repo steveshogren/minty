@@ -31,6 +31,7 @@ angular.module('project', [])
         };
     }).controller ('MintyCtrl', function ($scope, mintyRepo) {
         $scope.buckets = [];
+        $scope.incomeBuckets = [];
         $scope.payments = [];
         $scope.newName = "";
         $scope.newRule = "";
@@ -95,10 +96,13 @@ angular.module('project', [])
                $scope.updateModels();
            }); 
         };
+        $scope.getAllBuckets  = function() {
+            return $scope.buckets.concat($scope.incomeBuckets);
+        };
         $scope.updateModels = function() {
             mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
-                $scope.buckets = buckets;
-                //$scope.apply();
+                $scope.buckets = buckets.filter(function(b){return b.amount <= 0;});
+                $scope.incomeBuckets = buckets.filter(function(b){return b.amount > 0;});
             });
             mintyRepo.getAllPayments($scope.dayRange).success (function (payments){
                 $scope.payments = payments;

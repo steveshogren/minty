@@ -32,7 +32,7 @@
     </ul>
     -->
     <h3>Buckets</h3>
-    <ul ng-repeat="bucket in buckets">
+    <ul ng-repeat="bucket in getAllBuckets()">
       <li>
         <span>{{bucket.name}}</span>
         <div>Amount: {{bucket.amount}}</div>

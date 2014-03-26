@@ -52,24 +52,6 @@
   (let [num (* (with-precision 3 (/ (:amount x) total)) 100)]
     (if (> 0 num) (* -1 num) num)))
 
-(defn allBuckets [range]
-  (let [payments (group-by :bucket_id (grouped-payments range))
-        payment-counts (sum-payments-in-group payments)
-        buckets (into [] (sql/query db/db
-                                    ["select b.id as bucket_id, b.name, sum(p.amount) as amount
-                                      from buckets as b
-                                      left join payments as p on b.id = p.bucket_id group by b.id"]))
-        buckets (match-bucket-to-payment buckets payment-counts)
-        total-income (sum-income buckets)
-        total-payments (sum-payments buckets)]
-    (println (str "Total income: " total-income))
-    (println (str "Total payments: " total-payments))
-    (map (fn [b]
-           (let [b (assoc b :percentage_spent (percent-by b total-payments))
-                 b (assoc b :percentage_income (percent-by b total-income))]
-             b))
-         buckets)))
-
 (defn- match-rule-to-payment [rules payment]
   (let [rule-match
         (first (filter (fn [rule]
@@ -87,6 +69,23 @@
              p
              (match-rule-to-payment rules p)))
          payments)))
+
+(defn allBuckets [range]
+  (let [payments (group-by :bucket_id (grouped-payments range))
+        payment-counts (sum-payments-in-group payments)
+        buckets (into [] (sql/query db/db
+                                    ["select b.id as bucket_id, b.name, sum(p.amount) as amount
+                                      from buckets as b
+                                      left join payments as p on b.id = p.bucket_id group by b.id"]))
+        buckets (match-bucket-to-payment buckets payment-counts)
+        total-income (sum-income buckets)
+        total-payments (sum-payments buckets)]
+    (reverse (sort-by :percentage_spent 
+                      (map (fn [b]
+                             (let [b (assoc b :percentage_spent (percent-by b total-payments))
+                                   b (assoc b :percentage_income (percent-by b total-income))]
+                               b))
+                           buckets)))))
 
 (defn getSummedRules [range]
   (let [rules (getAllRules)
