@@ -14,7 +14,6 @@
                                       LEFT JOIN buckets as b ON p.bucket_id = b.id
                                       WHERE p.on_date <= CURRENT_DATE
                                             AND p.on_date > (CURRENT_DATE - INTERVAL '" range " days')::date
-                                            AND p.amount < 0
                                       ORDER BY on_date DESC")]))]
     (map (fn [p] (assoc p :on_date (str (:on_date p)))) payments)))
 
@@ -38,10 +37,20 @@
 (defn sum-payments-in-group [payment-group]
   (map (fn [[k v]] [k (reduce #(+ %1 (:amount %2)) 0 v)]) payment-group))
 
-(defn sum-buckets [buckets]
+(defn sum-by [buckets pred]
   (let [amounts (map :amount buckets)
-        amounts (map #(if (nil? %) 0 %) amounts)]
+        amounts (map #(if (and (not (nil? %)) (pred %)) % 0) amounts)]
     (reduce + amounts)))
+
+(defn sum-payments [buckets]
+  (sum-by buckets (fn [x] (>= 0 x))))
+
+(defn sum-income [buckets]
+  (sum-by buckets (fn [x] (<= 0 x))))
+
+(defn percent-by [x total]
+  (let [num (* (with-precision 3 (/ (:amount x) total)) 100)]
+    (if (> 0 num) (* -1 num) num)))
 
 (defn allBuckets [range]
   (let [payments (group-by :bucket_id (grouped-payments range))
@@ -51,10 +60,15 @@
                                       from buckets as b
                                       left join payments as p on b.id = p.bucket_id group by b.id"]))
         buckets (match-bucket-to-payment buckets payment-counts)
-        total-amount (sum-buckets buckets)]
-    (println (str "Total: " total-amount))
-    (println (str "Amounts: " (reduce str (map :amount buckets))))
-    (map #(assoc % :percentage (* (with-precision 3 (/ (:amount %) total-amount)) 100)) buckets)))
+        total-income (sum-income buckets)
+        total-payments (sum-payments buckets)]
+    (println (str "Total income: " total-income))
+    (println (str "Total payments: " total-payments))
+    (map (fn [b]
+           (let [b (assoc b :percentage_spent (percent-by b total-payments))
+                 b (assoc b :percentage_income (percent-by b total-income))]
+             b))
+         buckets)))
 
 (defn- match-rule-to-payment [rules payment]
   (let [rule-match

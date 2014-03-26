@@ -11,10 +11,17 @@
     <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
     <h3>Summary</h3>
     <table>
+      <tr>
+        <th>Name<th>
+        <th>Amount<th>
+        <th>% Spending<th>
+        <th>% Income<th>
+      </tr>
       <tr ng-repeat="bucket in buckets">
         <td>{{bucket.name}}<td>
         <td>{{bucket.amount}}<td>
-        <td>{{bucket.percentage}}<td>
+        <td>{{bucket.percentage_spent}}<td>
+        <td>{{bucket.percentage_income}}<td>
       </tr>
     </table>
     <!--
