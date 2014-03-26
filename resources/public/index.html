@@ -9,6 +9,21 @@
 <body>
   <div ng-controller="MintyCtrl">
     <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
+    <h3>Summary</h3>
+    <table>
+      <tr ng-repeat="bucket in buckets">
+        <td>{{bucket.name}}<td>
+        <td>{{bucket.amount}}<td>
+        <td>{{bucket.percentage}}<td>
+      </tr>
+    </table>
+    <!--
+    <ul ng-repeat="bucket in buckets">
+      <li>
+        <span>: {{bucket.amount}} {{bucket.percentage}}</span>
+      </li>
+    </ul>
+    -->
     <h3>Buckets</h3>
     <ul ng-repeat="bucket in buckets">
       <li>
