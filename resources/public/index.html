@@ -42,6 +42,8 @@
     </div>
     <div ng-show="page == 'buckets'">
     <h3>Buckets</h3>
+    <input ng-model="newName"></input>
+    <a href="" ng-click="createBucket()">Create Bucket</a>
     <ul ng-repeat="bucket in getAllBuckets()">
       <li>
         <span>{{bucket.name}}</span>
@@ -58,11 +60,17 @@
         </div>
       </li>
     </ul>
-    <input ng-model="newName"></input>
-    <a href="" ng-click="createBucket()">Create Bucket</a>
     </div>
     <div ng-show="page == 'payments'">
       <h3>Payments</h3>
+
+      <div>
+        <h4>Add Rule</h4>
+        <select ng-model="selectedBucket" ng-options="bucket.bucket_id as bucket.name for bucket in getAllBuckets()">
+        </select>
+        Pattern: <input ng-model="newRule"></input>
+        <a href="" ng-click="createRule(newRule, selectedBucket)">Create Pattern</a>
+      </div>
       <!--
           To: <input ng-model="newPayment.to"></input>
           Amount: <input ng-model="newPayment.amount"></input>
