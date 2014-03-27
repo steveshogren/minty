@@ -22,6 +22,9 @@ angular.module('project', [])
             getAllRules: function (range) {
                 return $http({method:"GET", url:"/rules", params: {"range":range}});
             },
+            getTotals: function (range) {
+                return $http({method:"GET", url:"/totals", params: {"range":range}});
+            },
             deleteRule: function (id) {
                 return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
             },
@@ -31,6 +34,7 @@ angular.module('project', [])
         };
     }).controller ('MintyCtrl', function ($scope, mintyRepo) {
         $scope.buckets = [];
+        $scope.totals = { income: 0, payments: 0};
         $scope.incomeBuckets = [];
         $scope.payments = [];
         $scope.newName = "";
@@ -38,6 +42,7 @@ angular.module('project', [])
         $scope.rules = [];
         $scope.showAllPayments = false;
         $scope.newPayment = {to: "", amount: ""};
+        $scope.page = "summary";
 
         $scope.dayRange = 30;
 
@@ -100,6 +105,9 @@ angular.module('project', [])
             return $scope.buckets.concat($scope.incomeBuckets);
         };
         $scope.updateModels = function() {
+            mintyRepo.getTotals($scope.dayRange).success (function (totals){
+                $scope.totals = totals;
+            });
             mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
                 $scope.buckets = buckets.filter(function(b){return b.amount <= 0;});
                 $scope.incomeBuckets = buckets.filter(function(b){return b.amount > 0;});

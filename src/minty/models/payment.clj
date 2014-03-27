@@ -17,6 +17,23 @@
                                       ORDER BY on_date DESC")]))]
     (map (fn [p] (assoc p :on_date (str (:on_date p)))) payments)))
 
+(defn get-payment-sum [range]
+  (let [range (Integer/parseInt range)]
+    (into [] (sql/query db/db
+                        [(str "SELECT sum(amount) as amount
+                               FROM payments AS p
+                               WHERE amount < 0
+                                 AND on_date <= CURRENT_DATE
+                                 AND on_date > (CURRENT_DATE - INTERVAL '" range " days')::date")]))))
+(defn get-income-sum [range]
+  (let [range (Integer/parseInt range)]
+    (into [] (sql/query db/db
+                        [(str "SELECT sum(amount) as amount
+                               FROM payments AS p
+                               WHERE amount > 0
+                                 AND on_date <= CURRENT_DATE
+                                 AND on_date > (CURRENT_DATE - INTERVAL '" range " days')::date")]))))
+
 (defn getAllRules []
   (into [] (sql/query db/db
                       ["select r.id as rule_id, r.regex, r.bucket_id, b.name
@@ -42,16 +59,6 @@
         amounts (map #(if (and (not (nil? %)) (pred %)) % 0) amounts)]
     (reduce + amounts)))
 
-(defn sum-payments [buckets]
-  (sum-by buckets (fn [x] (>= 0 x))))
-
-(defn sum-income [buckets]
-  (sum-by buckets (fn [x] (<= 0 x))))
-
-(defn percent-by [x total]
-  (let [num (* (with-precision 3 (/ (:amount x) total)) 100)]
-    (if (> 0 num) (* -1 num) num)))
-
 (defn- match-rule-to-payment [rules payment]
   (let [rule-match
         (first (filter (fn [rule]
@@ -70,6 +77,9 @@
              (match-rule-to-payment rules p)))
          payments)))
 
+(defn totals [range]
+  {:income (-> (get-income-sum range) first :amount) :payments (-> (get-payment-sum range) first :amount)})
+
 (defn allBuckets [range]
   (let [payments (group-by :bucket_id (grouped-payments range))
         payment-counts (sum-payments-in-group payments)
@@ -78,8 +88,9 @@
                                       from buckets as b
                                       left join payments as p on b.id = p.bucket_id group by b.id"]))
         buckets (match-bucket-to-payment buckets payment-counts)
-        total-income (sum-income buckets)
-        total-payments (sum-payments buckets)]
+        totals (totals range)
+        total-income (:income totals)
+        total-payments (:payments totals)]
     (reverse (sort-by :percentage_spent 
                       (map (fn [b]
                              (let [b (assoc b :percentage_spent (percent-by b total-payments))

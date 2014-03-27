@@ -6,10 +6,9 @@
             [minty.models.payment :as model]
             [clojure.data.json :as json]))
 
-#_(defn index [] (view/index (model/getAllPayments) (model/allBuckets)))
-
 (defroutes routes
   (GET  "/" [] (ring/resource-response "index.html" {:root "public"}))
+  (GET "/totals" [range] (json/write-str (model/totals range)))
   (GET "/buckets" [range] (json/write-str (model/allBuckets range)))
 
   (GET "/payments" [range] (json/write-str (model/grouped-payments range)))
