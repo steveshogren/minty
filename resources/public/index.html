@@ -47,9 +47,11 @@
     <ul ng-repeat="bucket in getAllBuckets()">
       <li>
         <span>{{bucket.name}}</span>
+        <div>% Of Total Income: {{bucket.percentage_income}}<div>
         <div>Amount: {{bucket.amount}}</div>
-        <a href="#" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
-        <ul ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
+        <a href="" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
+        <a href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">Show Rules</a>
+        <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
           <li>
             <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a href="#" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
           </li>

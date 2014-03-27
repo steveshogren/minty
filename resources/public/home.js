@@ -43,6 +43,7 @@ angular.module('project', [])
         $scope.showAllPayments = false;
         $scope.newPayment = {to: "", amount: ""};
         $scope.page = "summary";
+        $scope.showRules = [];
 
         $scope.dayRange = 30;
 
