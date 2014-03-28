@@ -53,7 +53,7 @@
         <a href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">Show Rules</a>
         <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
           <li>
-            <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a href="#" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
+            <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a href="" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
           </li>
         </ul>
         <div>
@@ -73,11 +73,6 @@
         Pattern: <input ng-model="newRule"></input>
         <a href="" ng-click="createRule(newRule, selectedBucket)">Create Pattern</a>
       </div>
-      <!--
-          To: <input ng-model="newPayment.to"></input>
-          Amount: <input ng-model="newPayment.amount"></input>
-          <a href="" ng-click="createPayment(newPayment.amount, newPayment.to)">Create Payment</a>
-          -->
       <div>
         <a href="" ng-show="!showAllPayments" ng-click="togglePayments()">Show all payments</a>
         <a href="" ng-show="showAllPayments" ng-click="togglePayments()">Show unbucketed payments</a>
@@ -86,7 +81,7 @@
         <li>
           <span>Paid To: {{payment.paid_to}} on {{payment.on_date}}</span>
           <div>Amount: {{payment.amount}}</div>
-          <!-- <a href="#" ng-click="deletePayment(payment.payment_id)">Delete</a> -->
+          <!-- <a href="" ng-click="deletePayment(payment.payment_id)">Delete</a> -->
         </li>
       </ul>
     </div>

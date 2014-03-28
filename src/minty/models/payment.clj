@@ -137,18 +137,26 @@
 (defn moveToBucket [line-id bucket-id]
   (sql/update! db/db :payments {:bucket_id bucket-id} ["id = ?" line-id]))
 
-(defn save-payments []
-  (with-open [in-file (io/reader "resources/data.csv")]
-    (doall
-     (if-let [c (csv/read-csv in-file)]
-       (map (fn [[_ date _ paid_to amount _]]
-              (createPayment amount paid_to date))
-            (drop 1 c))))))
+(defn get-csv-files []
+  (let [dir (clojure.java.io/file "resources/imports")
+        files (file-seq dir)
+        csv-files (filter #(.contains % ".csv") (map #(.getPath %) files))]
+    csv-files))
+
+(defn import-payments []
+  (map (fn [f]
+         (with-open [in-file (io/reader f)]
+           (doall
+            (if-let [c (csv/read-csv in-file)]
+              (map (fn [[_ date _ paid_to amount _]]
+                     (createPayment amount paid_to date))
+                   (drop 1 c))))))
+       (get-csv-files)))
 
 (comment
   (moveToBucket 1 1)
   (moveToBucket 1 2)
-  (save-payments)
+  (import-payments)
   (createBucket "b1")
   (createRule "test" 1)
   (createPayment "44" "test" "03/24/2014")

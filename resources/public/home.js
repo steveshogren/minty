@@ -13,12 +13,6 @@ angular.module('project', [])
             createBucket: function (name) {
                 return $http({method:"POST", url:"/bucket/create", data: {"name":name}});
             },
-            createPayment: function (amount, to, date) {
-                return $http({method:"POST", url:"/payment/create", data: {"amount":amount, "paid_to":to, "date": date}});
-            },
-            deletePayment: function (id) {
-                return $http({method:"POST", url:"/payment/delete", data: {"id":id}});
-            },
             getAllRules: function (range) {
                 return $http({method:"GET", url:"/rules", params: {"range":range}});
             },
@@ -67,18 +61,6 @@ angular.module('project', [])
                $scope.newRule = "";
            }); 
         };
-        $scope.createPayment = function(amount, to, date){
-           mintyRepo.createPayment(amount, to, date).success(function(){
-               $scope.updateModels();
-               $scope.newPayment = {to: "", amount: ""};
-           }); 
-        };
-        $scope.deletePayment = function(id){
-          // mintyRepo.deletePayment(id).success(function(){
-          //     $scope.updateModels();
-          // }); 
-        };
-
         $scope.createBucket = function(){
            mintyRepo.createBucket($scope.newName).success(function(){
                $scope.updateModels();
