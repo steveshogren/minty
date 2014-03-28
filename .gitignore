@@ -10,5 +10,4 @@ pom.xml
 pg
 .nrepl-port
 .lein-repl-history
-/resources/data.csv
-/resources/imports/data.csv
+/resources/imports
