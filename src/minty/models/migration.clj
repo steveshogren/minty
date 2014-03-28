@@ -27,9 +27,9 @@
   (model/createPayment 100 "Jack"))
 
 (defn migrate []
-  (drop-all)
+  #_(drop-all)
   (print "Creating database structure...") (flush)
-  (sql/db-do-commands db/db
+  #_(sql/db-do-commands db/db
                       (sql/create-table-ddl :rules
                                             [:id :serial "PRIMARY KEY"]
                                             [:regex :varchar "NOT NULL"]

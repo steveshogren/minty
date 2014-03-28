@@ -10,26 +10,12 @@
   (GET  "/" [] (ring/resource-response "index.html" {:root "public"}))
   (GET "/totals" [range] (json/write-str (model/totals range)))
   (GET "/buckets" [range] (json/write-str (model/allBuckets range)))
-
   (GET "/payments" [range] (json/write-str (model/grouped-payments range)))
+  (GET "/rules" [range] (json/write-str (model/getSummedRules range)))
 
-  (GET "/rules" [range]
-       #_(println (str (model/getSummedRules)))
-       (json/write-str (model/getSummedRules range)))
-
-  (POST "/rule/create" [regex bucket_id]
-        (println (str "Rule create regex: " regex " bucket: " bucket_id))
-        (model/createRule regex bucket_id))
-
+  (POST "/rule/create" [regex bucket_id] (model/createRule regex bucket_id))
   (POST "/rule/delete" [id] (model/deleteRule id))
 
-  (POST "/payment/delete" [id]
-        (model/deletePayment id))
-  (POST "/payment/create" [amount paid_to date]
-        (model/createPayment amount paid_to date))
-
   (POST "/bucket/create" [name] (model/createBucket name))
-  (POST "/bucket/delete" [id]
-        (println (str "Id was: " id))
-        (model/deleteBucket id))
+  (POST "/bucket/delete" [id] (model/deleteBucket id))
   )
