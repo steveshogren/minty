@@ -110,11 +110,16 @@
 (defn deleteRule [id]
   (sql/delete! db/db :rules ["id = ?" id]))
 
+(defn- select-payment [amount paid_to date]
+  (into [] (sql/query db/db ["SELECT * FROM payments WHERE paid_to = ? AND amount = ? AND on_date = ?"
+                             paid_to amount date])))
+
 (defn createPayment [amount paid_to date]
-  (sql/insert! db/db :payments [:amount :paid_to :on_date]
-               [(Float/parseFloat amount)
-                paid_to
-                (new java.sql.Date (.getTime (.parse (java.text.SimpleDateFormat. "MM/dd/yyyy") date)))]))
+  (let [amount (Float/parseFloat amount)
+        on_date (new java.sql.Date (.getTime (.parse (java.text.SimpleDateFormat. "MM/dd/yyyy") date)))
+        existed? (select-payment amount paid_to on_date)]
+    (if (empty? existed?)
+      (sql/insert! db/db :payments [:amount :paid_to :on_date] [amount paid_to on_date]))))
 
 
 (defn deletePayment [id]
@@ -146,7 +151,7 @@
   (save-payments)
   (createBucket "b1")
   (createRule "test" 1)
-  (createPayment "44" "test" "12/12/1999")
+  (createPayment "44" "test" "03/24/2014")
   (getAllPayments)
   )
 
