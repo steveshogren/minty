@@ -7,7 +7,7 @@
             [clojure.data.json :as json]))
 
 (defroutes routes
-  (GET  "/" [] (ring/resource-response "index.html" {:root "public"}))
+  (GET "/" [] (ring/resource-response "index.html" {:root "public"}))
   (GET "/totals" [range] (json/write-str (model/totals range)))
   (GET "/buckets" [range] (json/write-str (model/allBuckets range)))
   (GET "/payments" [range] (json/write-str (model/grouped-payments range)))

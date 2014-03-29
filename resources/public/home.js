@@ -1,4 +1,4 @@
-angular.module('project', [])
+angular.module('project', ['angularCharts'])
     .factory ('mintyRepo', function ($http){
         return {
             getAllBuckets: function (range) {
@@ -39,6 +39,19 @@ angular.module('project', [])
         $scope.page = "summary";
         $scope.showRules = [];
 
+        $scope.charttype = "pie";
+        $scope.chartdata = {
+		    series: [],
+		    data : []     
+	    };
+        $scope.chartconfig = {
+            "labels": false,
+            "title": "",
+            "legend": {
+                "display": true,
+                "position": "right"
+            }
+        };
         $scope.dayRange = 30;
 
         $scope.days = [7, 30, 90, 365];
@@ -93,6 +106,12 @@ angular.module('project', [])
             });
             mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
                 $scope.buckets = buckets.filter(function(b){return b.amount <= 0;});
+                $scope.chartdata.data = _.map($scope.buckets, function(bucket) {
+                    return {
+                        x: bucket.name,
+                        y: [bucket.amount]
+                    };
+                });
                 $scope.incomeBuckets = buckets.filter(function(b){return b.amount > 0;});
             });
             mintyRepo.getAllPayments($scope.dayRange).success (function (payments){

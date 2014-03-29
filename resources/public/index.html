@@ -4,7 +4,11 @@
   <meta charset="utf-8">
   <title></title>
 </head>
+<script type="text/javascript" src="jquery-2.1.0.js"></script> 
 <script src="lib/angular.js"></script>
+<script type="text/javascript" src="d3.js"></script> 
+<script type="text/javascript" src="angular-charts.js"></script>
+<script type="text/javascript" src="underscore.js"></script>
 <script src="home.js"></script>
 <body>
   <div ng-controller="MintyCtrl">
@@ -16,6 +20,9 @@
     </div>
     <div ng-show="page == 'summary'">
       <h3>Summary</h3>
+      <div ac-chart="charttype" ac-data="chartdata" ac-config="chartconfig"
+           style="height:400px; width:500px;"
+           id="chart" class="chart"></div>
       <div>
         Income: {{totals.income}}
       </div>
