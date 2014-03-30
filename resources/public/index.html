@@ -80,18 +80,14 @@
         </div>
         <div ng-show="page == 'buckets'">
           <div style="height:60px"></div>
+          <form class="pure-form">
+            <fieldset>
+              <legend>Create Bucket</legend>
+              <input class="pure-input-1-2" ng-model="newName"></input>
+              <a class="pure-button" href="" ng-click="createBucket()">Create Bucket</a>
+            </fieldset>
+          </form> 
           <h3>Buckets</h3>
-            <form class="pure-form">
-              <fieldset>
-                <legend>Add Rule</legend>
-                <select ng-model="selectedBucket" ng-options="bucket.bucket_id as bucket.name for bucket in getAllBuckets()">
-                </select>
-                Pattern: <input ng-model="newRule"></input>
-                <a class="pure-button" href="" ng-click="createRule(newRule, selectedBucket)">Create Pattern</a>
-              </fieldset>
-            </form> 
-          <input class="pure-input-1-2" ng-model="newName"></input>
-          <a class="pure-button" href="" ng-click="createBucket()">Create Bucket</a>
           <ul ng-repeat="bucket in getAllBuckets()">
             <li>
               <span ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
@@ -114,6 +110,15 @@
                     <td>{{rule.regex}}</td>
                     <td>{{rule.amount}}</td>
                     <td><a class="pure-button" href="" ng-click="deleteRule(rule.rule_id)">Delete</a></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <input ng-model="newRule"></input>
+                    </td>
+                    <td></td>
+                    <td>
+                      <a class="pure-button" href="" ng-click="createRule(newRule, bucket.bucket_id)">Create</a>
+                    </td> 
                   </tr>
                 </tbody>
               </table>
