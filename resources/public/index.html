@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="pure-min.css">
+  <link rel="stylesheet" href="minty.css">
    <!--[if lte IE 8]>
         <link rel="stylesheet" href="side-menu-old-ie.css">
     <![endif]-->
@@ -41,32 +42,20 @@
     </div>
     <div id="main">
       <div class="content">
-        <div>
-          Day Range <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
-
-          Income: {{totals.income}}
-          Payments: {{totals.payments}}
-          Unspent: {{totals.income + totals.payments}}
+        <div id="header_container">
+            <div id="header">
+              Day Range <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
+              Income: <span class="green">{{totals.income}}</span> 
+              Payments: <span class="red">{{totals.payments}}</span>
+              Unspent:
+              <span ng-class="(totals.income + totals.payments > 0) ? 'green' : 'red'">
+                {{totals.income + totals.payments}}
+              </span>
+            </div>
         </div>
 
         <div ng-show="page == 'summary'">
           <h3>Summary</h3>
-          <!--
-              
-              Removing chart, it's busy
-              <div ac-chart="charttype" ac-data="chartdata" ac-config="chartconfig"
-                   style="height:400px; width:500px;"
-                   id="chart" class="chart"></div> -->
-          <div>
-            Income: {{totals.income}}
-          </div>
-          <div>
-            Payments: {{totals.payments}}
-          </div>
-          <div>
-            Unspent: {{totals.income + totals.payments}}
-          </div>
-
           <table class="pure-table">
             <thead>
               <tr>
@@ -95,29 +84,18 @@
               <span ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
                 {{bucket.name}} - {{bucket.percentage_income}}% - ${{bucket.amount}}
               </span>
-              <!--
-              <div>% Of Total Income: <div>
-                  <div>Amount: </div>
-              -->
-                  <a class="pure-button" href="" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
-                  <a class="pure-button" href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
-                    {{ (showRules[bucket.bucket_id]) ? "Hide Rules" : "Show Rules" }}
-                  </a>
-                  <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
-                    <li>
-                      <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a class="pure-button" href="" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
-                    </li>
-                  </ul>
-                  <!--
-                      It is dumb to have the pattern create here...
-                  <div>
-                    Pattern: <input ng-model="newRule"></input>
-                    <a class="pure-button" href="" ng-click="createRule(newRule, bucket.bucket_id)">Create Pattern</a>
-                  </div>
-                  -->
+              <a class="pure-button" href="" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
+              <a class="pure-button" href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
+                {{ (showRules[bucket.bucket_id]) ? "Hide Rules" : "Show Rules" }}
+              </a>
+              <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
+                <li>
+                  <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a class="pure-button" href="" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
+                </li>
+              </ul>
             </li>
           </ul>
-          </div>
+        </div>
           <div ng-show="page == 'payments'">
             <h3>Payments</h3>
             <form class="pure-form">
