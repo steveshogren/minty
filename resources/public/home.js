@@ -97,12 +97,6 @@ angular.module('project', ['angularCharts'])
             });
             mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
                 $scope.buckets = buckets.filter(function(b){return b.amount <= 0;});
-                $scope.chartdata.data = _.map($scope.buckets, function(bucket) {
-                    return {
-                        x: bucket.name,
-                        y: [bucket.amount]
-                    };
-                });
                 $scope.incomeBuckets = buckets.filter(function(b){return b.amount > 0;});
             });
             mintyRepo.getAllPayments($scope.dayRange).success (function (payments){
