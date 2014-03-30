@@ -40,88 +40,123 @@
       </div>
     </div>
     <div id="main">
-      <div>
-        Day Range <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
-      </div>
-      <div ng-show="page == 'summary'">
-        <h3>Summary</h3>
-        <!--
-            
-            Removing chart, it's busy
-            <div ac-chart="charttype" ac-data="chartdata" ac-config="chartconfig"
-                 style="height:400px; width:500px;"
-                 id="chart" class="chart"></div> -->
+      <div class="content">
         <div>
+          Day Range <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select>
+
           Income: {{totals.income}}
-        </div>
-        <div>
           Payments: {{totals.payments}}
-        </div>
-        <div>
           Unspent: {{totals.income + totals.payments}}
         </div>
-        <table>
-          <tr>
-            <th>Name<th>
-            <th>Amount<th>
-            <th>% Spending<th>
-            <th>% Income<th>
-          </tr>
-          <tr ng-repeat="bucket in buckets">
-            <td>{{bucket.name}}<td>
-            <td>{{bucket.amount}}<td>
-            <td>{{bucket.percentage_spent}}<td>
-            <td>{{bucket.percentage_income}}<td>
-          </tr>
-        </table>
-      </div>
-      <div ng-show="page == 'buckets'">
-        <h3>Buckets</h3>
-        <input ng-model="newName"></input>
-        <a href="" ng-click="createBucket()">Create Bucket</a>
-        <ul ng-repeat="bucket in getAllBuckets()">
-          <li>
-            <span>{{bucket.name}}</span>
-            <div>% Of Total Income: {{bucket.percentage_income}}<div>
-                <div>Amount: {{bucket.amount}}</div>
-                <a href="" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
-                <a href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">Show Rules</a>
-                <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
-                  <li>
-                    <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a href="" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
-                  </li>
-                </ul>
-                <div>
-                  Pattern: <input ng-model="newRule"></input>
-                  <a href="" ng-click="createRule(newRule, bucket.bucket_id)">Create Pattern</a>
-                </div>
-          </li>
-        </ul>
+
+        <div ng-show="page == 'summary'">
+          <h3>Summary</h3>
+          <!--
+              
+              Removing chart, it's busy
+              <div ac-chart="charttype" ac-data="chartdata" ac-config="chartconfig"
+                   style="height:400px; width:500px;"
+                   id="chart" class="chart"></div> -->
+          <div>
+            Income: {{totals.income}}
+          </div>
+          <div>
+            Payments: {{totals.payments}}
+          </div>
+          <div>
+            Unspent: {{totals.income + totals.payments}}
+          </div>
+
+          <table class="pure-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>% Spending</th>
+                <th>% Income</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="bucket in buckets">
+                <td>{{bucket.name}}</td>
+                <td>{{bucket.amount}}</td>
+                <td>{{bucket.percentage_spent}}</td>
+                <td>{{bucket.percentage_income}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div ng-show="page == 'payments'">
-          <h3>Payments</h3>
-          
-          <div>
-            <h4>Add Rule</h4>
-            <select ng-model="selectedBucket" ng-options="bucket.bucket_id as bucket.name for bucket in getAllBuckets()">
-            </select>
-            Pattern: <input ng-model="newRule"></input>
-            <a href="" ng-click="createRule(newRule, selectedBucket)">Create Pattern</a>
-          </div>
-          <div>
-            <a href="" ng-show="!showAllPayments" ng-click="togglePayments()">Show all payments</a>
-            <a href="" ng-show="showAllPayments" ng-click="togglePayments()">Show unbucketed payments</a>
-          </div>
-          <ul ng-repeat="payment in getPayments()">
+        <div ng-show="page == 'buckets'">
+          <h3>Buckets</h3>
+          <input class="pure-input-1-2" ng-model="newName"></input>
+          <a class="pure-button" href="" ng-click="createBucket()">Create Bucket</a>
+          <ul ng-repeat="bucket in getAllBuckets()">
             <li>
-              <span>Paid To: {{payment.paid_to}} on {{payment.on_date}}</span>
-              <div>Amount: {{payment.amount}}</div>
-              <!-- <a href="" ng-click="deletePayment(payment.payment_id)">Delete</a> -->
+              <span ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
+                {{bucket.name}} - {{bucket.percentage_income}}% - ${{bucket.amount}}
+              </span>
+              <!--
+              <div>% Of Total Income: <div>
+                  <div>Amount: </div>
+              -->
+                  <a class="pure-button" href="" ng-click="deleteBucket(bucket.bucket_id)">Delete</a>
+                  <a class="pure-button" href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
+                    {{ (showRules[bucket.bucket_id]) ? "Hide Rules" : "Show Rules" }}
+                  </a>
+                  <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
+                    <li>
+                      <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a class="pure-button" href="" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
+                    </li>
+                  </ul>
+                  <!--
+                      It is dumb to have the pattern create here...
+                  <div>
+                    Pattern: <input ng-model="newRule"></input>
+                    <a class="pure-button" href="" ng-click="createRule(newRule, bucket.bucket_id)">Create Pattern</a>
+                  </div>
+                  -->
             </li>
           </ul>
+          </div>
+          <div ng-show="page == 'payments'">
+            <h3>Payments</h3>
+            <form class="pure-form">
+              <fieldset>
+                <legend>Add Rule</legend>
+                <select ng-model="selectedBucket" ng-options="bucket.bucket_id as bucket.name for bucket in getAllBuckets()">
+                </select>
+                Pattern: <input ng-model="newRule"></input>
+                <a class="pure-button" href="" ng-click="createRule(newRule, selectedBucket)">Create Pattern</a>
+              </fieldset>
+            </form> 
+            <div>
+              <a class="pure-button" href="" ng-click="togglePayments()">
+                {{(showAllPayments) ? "Hide bucketed payments" : "Show all payments"}}
+              </a>
+            </div>
+            <div class="pure-g">
+              <table class="pure-table pure-u-1-1">
+                <thead>
+                  <tr>
+                    <th class="spure-u-1-3">Paid To</th>
+                    <th class="spure-u-1-3">Date</th>
+                    <th class="spure-u-1-3">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="payment in getPayments()">
+                    <td> {{payment.paid_to}} </td>
+                    <td> {{payment.on_date}} </td>
+                    <td> {{payment.amount}} </td>
+                    <!-- <a href="" ng-click="deletePayment(payment.payment_id)">Delete</a> -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
         </div>
-        </div>
-      </div>
-  
+        
+      </div> 
 </body>
 </html>
