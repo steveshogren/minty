@@ -38,20 +38,6 @@ angular.module('project', ['angularCharts'])
         $scope.newPayment = {to: "", amount: ""};
         $scope.page = "summary";
         $scope.showRules = [];
-
-        $scope.charttype = "pie";
-        $scope.chartdata = {
-		    series: [],
-		    data : []     
-	    };
-        $scope.chartconfig = {
-            "labels": false,
-            "title": "",
-            "legend": {
-                "display": true,
-                "position": "right"
-            }
-        };
         $scope.dayRange = 30;
 
         $scope.days = [7, 30, 90, 365];
@@ -63,7 +49,9 @@ angular.module('project', ['angularCharts'])
             return $scope.payments.filter(function(p){return p.bucket_id == null;});
         };
         $scope.getRulesForBucket = function(bid) {
-            return $scope.rules.filter(function(r){return r.bucket_id === bid;});
+            var bucketRules = $scope.rules.filter(function(r){return r.bucket_id === bid;});
+            return _.sortBy(bucketRules, function(b) {return b.amount});
+
         };
         $scope.togglePayments = function() {
             return $scope.showAllPayments = !$scope.showAllPayments;
@@ -81,9 +69,12 @@ angular.module('project', ['angularCharts'])
            }); 
         };
         $scope.deleteBucket = function(id){
-            var ask = confirm("There are rules on this bucket, are you sure you want to delete them and this?");
+            var rules = $scope.getRulesForBucket(id);
+            var msg = (rules.length > 0)
+                ? "There are rules on this bucket, delete this rule and buckets?"
+                : "Are you sure you want to delete this bucket?";
+            var ask = confirm(msg);
             if (ask) {
-                var rules = $scope.getRulesForBucket(id);
                 for (var i=0;i<rules.length;i++) {
                     $scope.deleteRule(rules[i].rule_id);
                 }

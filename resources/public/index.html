@@ -88,11 +88,22 @@
               <a class="pure-button" href="" ng-click="showRules[bucket.bucket_id] = !showRules[bucket.bucket_id]">
                 {{ (showRules[bucket.bucket_id]) ? "Hide Rules" : "Show Rules" }}
               </a>
-              <ul ng-show="showRules[bucket.bucket_id]" ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
-                <li>
-                  <div>Pattern: {{rule.regex}} Total: {{rule.amount}} <a class="pure-button" href="" ng-click="deleteRule(rule.rule_id)">Delete</a> </div>
-                </li>
-              </ul>
+              <table ng-show="showRules[bucket.bucket_id]" class="pure-table">
+                <thead>
+                  <tr>
+                    <th>Pattern</th>
+                    <th>Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="rule in getRulesForBucket(bucket.bucket_id)">
+                    <td>{{rule.regex}}</td>
+                    <td>{{rule.amount}}</td>
+                    <td><a class="pure-button" href="" ng-click="deleteRule(rule.rule_id)">Delete</a></td>
+                  </tr>
+                </tbody>
+              </table>
             </li>
           </ul>
         </div>
