@@ -27,6 +27,13 @@ angular.module('project', ['angularCharts'])
             }
         };
     }).controller ('MintyCtrl', function ($scope, mintyRepo) {
+        $scope.paymentShape = ["bucket_id", "amount"];
+
+        $scope.isType = function(o, type) {
+            return _.reduce(type, function(accum, key){
+                return accum && (key in o);
+            }, true);
+        };
         $scope.buckets = [];
         $scope.totals = { income: 0, payments: 0};
         $scope.incomeBuckets = [];
