@@ -1,23 +1,18 @@
 angular.module('project', ['angularCharts'])
     .factory ('mintyRepo', function ($http){
         return {
-            getAllBuckets: function (range) {
-                return $http({method:"GET", url:"/buckets", params: {"range":range}});
-            },
-            getAllPayments: function (range) {
-                return $http({method:"GET", url:"/payments", params: {"range":range}});
+            bucketsUrl: "/buckets",
+            rulesUrl: "/rules",
+            totalsUrl: "/totals",
+            paymentsUrl: "/payments",
+            gett: function(url, range) {
+                return $http({method:"GET", url:url, params: {"range":range}});
             },
             deleteBucket: function (id) {
                 return $http({method:"POST", url:"/bucket/delete", data: {"id":id}});
             },
             createBucket: function (name) {
                 return $http({method:"POST", url:"/bucket/create", data: {"name":name}});
-            },
-            getAllRules: function (range) {
-                return $http({method:"GET", url:"/rules", params: {"range":range}});
-            },
-            getTotals: function (range) {
-                return $http({method:"GET", url:"/totals", params: {"range":range}});
             },
             deleteRule: function (id) {
                 return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
@@ -99,17 +94,17 @@ angular.module('project', ['angularCharts'])
             return $scope.buckets.concat($scope.incomeBuckets);
         };
         $scope.updateModels = function() {
-            mintyRepo.getTotals($scope.dayRange).success (function (totals){
+            mintyRepo.gett(mintyRepo.totalsUrl, $scope.dayRange).success (function (totals){
                 $scope.totals = totals;
             });
-            mintyRepo.getAllBuckets($scope.dayRange).success (function (buckets){
+            mintyRepo.gett(mintyRepo.bucketsUrl, $scope.dayRange).success (function (buckets){
                 $scope.buckets = buckets.filter(function(b){return b.amount <= 0;});
                 $scope.incomeBuckets = buckets.filter(function(b){return b.amount > 0;});
             });
-            mintyRepo.getAllPayments($scope.dayRange).success (function (payments){
+            mintyRepo.gett(mintyRepo.paymentsUrl, $scope.dayRange).success (function (payments){
                 $scope.payments = payments;
             });
-            mintyRepo.getAllRules($scope.dayRange).success (function (rules){
+            mintyRepo.gett(mintyRepo.paymentsUrl, $scope.dayRange).success (function (rules){
                 $scope.rules = rules;
             });
         };
