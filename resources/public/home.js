@@ -43,7 +43,15 @@ angular.module('project', ['angularCharts'])
         $scope.dayRange = 30;
 
         $scope.days = [7, 30, 90, 365];
-        
+
+        $scope.blankModels = function() {
+            $scope.rules = [];
+            $scope.buckets = [];
+            $scope.incomeBuckets = [];
+            $scope.totals = { income: 0, payments: 0};
+            $scope.payments = [];
+        };
+
         $scope.getPayments = function() {
             if ($scope.showAllPayments) {
                 return $scope.payments;
@@ -53,7 +61,6 @@ angular.module('project', ['angularCharts'])
         $scope.getRulesForBucket = function(bid) {
             var bucketRules = $scope.rules.filter(function(r){return r.bucket_id === bid;});
             return _.sortBy(bucketRules, function(b) {return b.amount});
-
         };
         $scope.togglePayments = function() {
             return $scope.showAllPayments = !$scope.showAllPayments;
@@ -92,6 +99,10 @@ angular.module('project', ['angularCharts'])
         };
         $scope.getAllBuckets  = function() {
             return $scope.buckets.concat($scope.incomeBuckets);
+        };
+        $scope.dayRangeChange = function() {
+            $scope.blankModels();
+            $scope.updateModels();
         };
         $scope.updateModels = function() {
             mintyRepo.gett(mintyRepo.totalsUrl, $scope.dayRange).success (function (totals){

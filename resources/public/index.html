@@ -47,7 +47,7 @@
         <div id="header_container">
             <div id="header">
               <form class="pure-form">
-              <span class="header-items">Day Range: <select ng-model="dayRange" ng-options="day for day in days" ng-change="updateModels()"></select></span>
+              <span class="header-items">Day Range: <select ng-model="dayRange" ng-options="day for day in days" ng-change="dayRangeChange()"></select></span>
               <span class="header-items">Income: <span class="green">{{totals.income}}</span></span> 
               <span class="header-items">Spent: <span class="red">{{totals.payments}}</span></span>
               <span class="header-items">
