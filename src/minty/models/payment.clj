@@ -80,6 +80,13 @@
 (defn totals [range]
   {:income (-> (get-income-sum range) first :amount) :payments (-> (get-payment-sum range) first :amount)})
 
+(defn percent-by [x total]
+  (if (or (nil? (:amount x))
+          (nil? total))
+    0
+    (let [num (* (with-precision 3 (/ (:amount x) total)) 100)]
+      (if (> 0 num) (* -1 num) num))))
+
 (defn allBuckets [range]
   (let [payments (group-by :bucket_id (grouped-payments range))
         payment-counts (sum-payments-in-group payments)
