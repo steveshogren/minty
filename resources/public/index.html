@@ -134,6 +134,12 @@
             <h3>Payments</h3>
             <form class="pure-form">
               <fieldset>
+                <legend>Update From CSVs</legend>
+                <a class="pure-button" href="" ng-click="import()">Import</a>
+              </fieldset>
+            </form> 
+            <form class="pure-form">
+              <fieldset>
                 <legend>Add Rule</legend>
                 <select ng-model="selectedBucket" ng-options="bucket.bucket_id as bucket.name for bucket in getAllBuckets()">
                 </select>

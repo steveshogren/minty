@@ -17,6 +17,9 @@ angular.module('project', ['angularCharts'])
             deleteRule: function (id) {
                 return $http({method:"POST", url:"/rule/delete", data: {"id":id}});
             },
+            import: function () {
+                return $http({method:"POST", url:"/import", data: {}});
+            },
             createRule: function (regex, bid) {
                 return $http({method:"POST", url:"/rule/create", data: {"regex":regex, "bucket_id":bid}});
             }
@@ -44,6 +47,12 @@ angular.module('project', ['angularCharts'])
 
         $scope.days = [7, 30, 90, 365];
 
+        $scope.import = function() {
+            $scope.blankModels();
+            mintyRepo.import().success(function(){
+                $scope.dayRangeChange();
+            }); 
+        };
         $scope.blankModels = function() {
             $scope.rules = [];
             $scope.buckets = [];
@@ -51,7 +60,6 @@ angular.module('project', ['angularCharts'])
             $scope.totals = { income: 0, payments: 0};
             $scope.payments = [];
         };
-
         $scope.getPayments = function() {
             if ($scope.showAllPayments) {
                 return $scope.payments;
@@ -97,7 +105,7 @@ angular.module('project', ['angularCharts'])
                $scope.updateModels();
            }); 
         };
-        $scope.getAllBuckets  = function() {
+        $scope.getAllBuckets = function() {
             return $scope.buckets.concat($scope.incomeBuckets);
         };
         $scope.dayRangeChange = function() {

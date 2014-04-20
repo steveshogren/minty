@@ -18,4 +18,6 @@
 
   (POST "/bucket/create" [name] (model/createBucket name))
   (POST "/bucket/delete" [id] (model/deleteBucket id))
+
+  (POST "/import" [] (model/import-payments))
   )
