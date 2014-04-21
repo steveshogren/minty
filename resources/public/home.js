@@ -46,6 +46,9 @@ angular.module('project', ['angularCharts'])
         $scope.dayRange = 30;
 
         $scope.days = [7, 30, 90, 365];
+        $scope.sumedIncomePayments = function() {
+            return ($scope.totals.income + $scope.totals.payments).toFixed(2);
+        };
 
         $scope.import = function() {
             $scope.blankModels();

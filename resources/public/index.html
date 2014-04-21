@@ -53,7 +53,7 @@
               <span class="header-items">
                 Unspent:
                 <span ng-class="(totals.income + totals.payments > 0) ? 'green' : 'red'">
-                  {{totals.income + totals.payments}}
+                  {{sumedIncomePayments()}}
                 </span>
               </span>
               </form>
