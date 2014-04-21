@@ -1,5 +1,6 @@
 #header_container {
-    background:#191818;
+    background:#FFFFFF;
+      //background:#191818;
     border:1px solid #666;
     height:60;
     left:0;
@@ -13,7 +14,7 @@
     margin:0 auto;
     width:100%;
     text-align:center;
-    color: #999;
+    //color: #999;
 }
 .header-items{
     margin-right:15px;
