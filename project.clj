@@ -9,6 +9,7 @@
                  [ring/ring-devel "1.1.0"]
                  [org.clojure/java.jdbc "0.3.2"]
                  [postgresql "9.1-901.jdbc4"]     
+                 [prismatic/schema "0.2.4"]
                  [org.clojure/data.csv "0.1.2"]
                  [ring-basic-authentication "1.0.1"]
                  [environ "0.2.1"]

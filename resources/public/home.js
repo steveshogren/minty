@@ -1,3 +1,4 @@
+/*global angular,_ */
 angular.module('project', ['angularCharts'])
     .factory ('mintyRepo', function ($http){
         return {
@@ -44,7 +45,7 @@ angular.module('project', ['angularCharts'])
         $scope.page = "summary";
         $scope.showRules = [];
         $scope.dayRange = 30;
-
+        
         $scope.days = [7, 30, 90, 365];
         $scope.sumedIncomePayments = function() {
             return ($scope.totals.income + $scope.totals.payments).toFixed(2);
@@ -71,7 +72,7 @@ angular.module('project', ['angularCharts'])
         };
         $scope.getRulesForBucket = function(bid) {
             var bucketRules = $scope.rules.filter(function(r){return r.bucket_id === bid;});
-            return _.sortBy(bucketRules, function(b) {return b.amount});
+            return _.sortBy(bucketRules, function(b) {return b.amount;});
         };
         $scope.togglePayments = function() {
             return $scope.showAllPayments = !$scope.showAllPayments;
@@ -88,6 +89,7 @@ angular.module('project', ['angularCharts'])
                $scope.newName = "";
            }); 
         };
+        
         $scope.deleteBucket = function(id){
             var rules = $scope.getRulesForBucket(id);
             var msg = (rules.length > 0)
@@ -98,6 +100,7 @@ angular.module('project', ['angularCharts'])
                 for (var i=0;i<rules.length;i++) {
                     $scope.deleteRule(rules[i].rule_id);
                 }
+                
                 mintyRepo.deleteBucket(id).success(function(){
                     $scope.updateModels();
                 }); 
